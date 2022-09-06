@@ -1,11 +1,10 @@
 package com.works.restcontrollers;
 
+import com.works.props.Product;
 import com.works.services.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class AccountRestController {
     }
 
     @GetMapping("/news")
-    public ResponseEntity news() {
+    public ResponseEntity news(@RequestBody Product product) {
         return service.news();
     }
 
