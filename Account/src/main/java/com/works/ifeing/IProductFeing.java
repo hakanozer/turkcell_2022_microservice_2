@@ -17,7 +17,7 @@ public interface IProductFeing {
     ProConfig fncProConfig();
 
     @PostMapping("/product/save")
-    ResponseEntity proSave(@RequestBody Product product);
+    ResultProduct proSave(@RequestBody Product product);
 
     @GetMapping("/product/findId/{pid}")
     ResultProduct findId(@PathVariable int pid);

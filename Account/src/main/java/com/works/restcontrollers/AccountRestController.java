@@ -29,4 +29,9 @@ public class AccountRestController {
         return service.feingSample();
     }
 
+    @GetMapping("/news")
+    public ResponseEntity news() {
+        return service.news();
+    }
+
 }
