@@ -26,6 +26,7 @@ public class ProductService {
     private String apikey;
 
     public ResponseEntity apiKey() {
+        int i = 1 / 0;
         Map<String, Object> hm = new LinkedHashMap<>();
         hm.put("apikey", apikey);
         hm.put("config", config.config());

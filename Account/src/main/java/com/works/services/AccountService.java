@@ -6,10 +6,13 @@ import com.works.props.ProConfig;
 import com.works.props.Product;
 import com.works.props.ResultProduct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.sleuth.Span;
+import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,12 +22,14 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AccountService {
 
     final DiscoveryClient discoveryClient;
     final IProductFeing feing;
     final INewsFeing iNewsFeing;
     final CacheManager cacheManager;
+    final Tracer tracer;
 
     public ResponseEntity info() {
         List<ServiceInstance> ls = discoveryClient.getInstances("product");
@@ -42,7 +47,12 @@ public class AccountService {
 
 
     public ResponseEntity feingInfo() {
+        Span span = tracer.currentSpan();
         cacheManager.getCache("news").clear();
+        log.trace("this line error");
+        String parentId = span.context().parentId();
+        String spanId = span.context().spanId();
+        log.info( "parentId", parentId, spanId );
         return new ResponseEntity( feing.fncProConfig(), HttpStatus.OK );
     }
 
