@@ -24,4 +24,9 @@ public class AccountRestController {
         return service.feingInfo();
     }
 
+    @GetMapping("/feingSample")
+    public ResponseEntity feingSample() {
+        return service.feingSample();
+    }
+
 }

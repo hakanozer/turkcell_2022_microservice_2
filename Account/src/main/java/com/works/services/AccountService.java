@@ -2,6 +2,7 @@ package com.works.services;
 
 import com.works.ifeing.IProductFeing;
 import com.works.props.ProConfig;
+import com.works.props.ResultProduct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -36,6 +37,11 @@ public class AccountService {
 
     public ResponseEntity feingInfo() {
         return new ResponseEntity( feing.fncProConfig(), HttpStatus.OK );
+    }
+
+    public ResponseEntity feingSample() {
+        ResultProduct product = feing.findId(1);
+        return new ResponseEntity( product.getResult() , HttpStatus.OK );
     }
 
 }
