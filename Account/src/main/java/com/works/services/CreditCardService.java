@@ -1,13 +1,17 @@
 package com.works.services;
 
+import com.google.gson.Gson;
 import com.works.entities.CreditCard;
+import com.works.props.JmsData;
 import com.works.repositories.CreditCardRepository;
 import com.works.util.TinkEncDec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -17,6 +21,7 @@ import java.util.Optional;
 public class CreditCardService {
 
     final CreditCardRepository cRepo;
+    final JmsTemplate jmsTemplate;
 
     public ResponseEntity save(CreditCard creditCard) {
         String cipherTextCardNo = TinkEncDec.encrypt(creditCard.getCardNo(), creditCard.getAssociatedData());
@@ -39,6 +44,13 @@ public class CreditCardService {
             if ( planTextCardNo.equals("") ) {
                 hm.put("status", false);
             }else {
+                JmsData data = new JmsData();
+                data.setId(10);
+                data.setName("user");
+                data.setMessage("new message detail");
+                Gson gson = new Gson();
+                String stData = gson.toJson(data);
+                jmsTemplate.convertAndSend(stData);
                 hm.put("status", true);
                 hm.put("cardNo", planTextCardNo);
             }
