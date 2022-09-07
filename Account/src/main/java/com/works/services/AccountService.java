@@ -1,5 +1,6 @@
 package com.works.services;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.works.ifeing.INewsFeing;
 import com.works.ifeing.IProductFeing;
 import com.works.props.ProConfig;
@@ -21,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -48,8 +51,8 @@ public class AccountService {
         return new ResponseEntity(null, HttpStatus.NOT_FOUND);
     }
 
-
-    public ResponseEntity feingInfo() {
+    @HystrixCommand(fallbackMethod = "errorFeingInfo")
+    public ResponseEntity feingInfo( String id ) {
         cacheManager.getCache("news").clear();
         /*
         Span span = tracer.currentSpan();
@@ -62,6 +65,16 @@ public class AccountService {
         */
         return new ResponseEntity( feing.fncProConfig(), HttpStatus.OK );
     }
+
+
+    public ResponseEntity errorFeingInfo( String id ) {
+        Map<String, Object> hm = new LinkedHashMap<>();
+        hm.put("status", false);
+        hm.put("id", id);
+        hm.put("message", "FeingInfo Error");
+        return new ResponseEntity( hm, HttpStatus.BAD_REQUEST );
+    }
+
 
     public ResponseEntity feingSample() {
         Product product = new Product();

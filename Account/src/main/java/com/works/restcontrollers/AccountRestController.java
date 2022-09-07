@@ -19,8 +19,8 @@ public class AccountRestController {
     }
 
     @GetMapping("/infoFeing")
-    public ResponseEntity infoFeing() {
-        return service.feingInfo();
+    public ResponseEntity infoFeing( @RequestParam(defaultValue = "") String id ) {
+        return service.feingInfo(id);
     }
 
     @GetMapping("/feingSample")
