@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "GoogleNews", url = "https://newsapi.org/v2/")
 public interface INewsFeing {
 
-    @GetMapping(value = "/top-headline")
+    @GetMapping(value = "/top-headlines")
     Object newsApi(@RequestParam String country, @RequestParam String category, @RequestParam String apiKey);
 
 }

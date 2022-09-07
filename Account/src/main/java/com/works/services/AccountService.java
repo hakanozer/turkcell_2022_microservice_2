@@ -12,10 +12,13 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.sleuth.Span;
+import org.springframework.cloud.sleuth.SpanAndScope;
 import org.springframework.cloud.sleuth.Tracer;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -47,12 +50,16 @@ public class AccountService {
 
 
     public ResponseEntity feingInfo() {
-        Span span = tracer.currentSpan();
         cacheManager.getCache("news").clear();
-        log.trace("this line error");
-        String parentId = span.context().parentId();
-        String spanId = span.context().spanId();
-        log.info( "parentId", parentId, spanId );
+        /*
+        Span span = tracer.currentSpan();
+        if (span != null) {
+            log.info("Span ID hex {}", span.context().spanId());
+            log.info("Trace ID hex {}", span.context().traceId());
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("traceId", span.context().traceId());
+        */
         return new ResponseEntity( feing.fncProConfig(), HttpStatus.OK );
     }
 
